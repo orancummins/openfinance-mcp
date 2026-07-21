@@ -9,7 +9,10 @@
 <body>
   <header class="topbar">
     <span class="brand">◧ Open Finance MCP <em>Console</em></span>
-    <span id="health" class="pill">checking…</span>
+    <div class="topbar-right">
+      <button id="openCredsBtn" class="creds-btn">⚙ Credentials</button>
+      <span id="health" class="pill">checking…</span>
+    </div>
   </header>
   <nav class="tabs">
     <button data-tab="tools" class="active">Tools</button>
@@ -49,6 +52,38 @@
       <pre id="testOutput" class="terminal">No run yet.</pre>
     </section>
   </main>
+
+  <dialog id="credsModal" aria-labelledby="credsModalTitle">
+    <div class="modal-header">
+      <h2 id="credsModalTitle">Credentials</h2>
+      <button id="closeCredsBtn" class="modal-close" aria-label="Close">&times;</button>
+    </div>
+    <p class="muted">Saved to <code id="envFilePath">.env</code> at the repo root. Restart the MCP server after saving.</p>
+    <form id="credsForm">
+      <label>OPEN_FINANCE_PARTNER_ID
+        <input name="OPEN_FINANCE_PARTNER_ID" type="text" autocomplete="off" placeholder="Partner ID" />
+      </label>
+      <label>OPEN_FINANCE_PARTNER_SECRET
+        <div class="secret-row">
+          <input name="OPEN_FINANCE_PARTNER_SECRET" type="password" autocomplete="off" placeholder="Partner secret" />
+          <button type="button" class="toggle-secret" data-target="OPEN_FINANCE_PARTNER_SECRET">Show</button>
+        </div>
+      </label>
+      <label>OPEN_FINANCE_APP_KEY
+        <div class="secret-row">
+          <input name="OPEN_FINANCE_APP_KEY" type="password" autocomplete="off" placeholder="App key" />
+          <button type="button" class="toggle-secret" data-target="OPEN_FINANCE_APP_KEY">Show</button>
+        </div>
+      </label>
+      <label>OPEN_FINANCE_API_BASE_URL
+        <input name="OPEN_FINANCE_API_BASE_URL" type="text" autocomplete="off" placeholder="https://api.finicity.com" />
+      </label>
+      <div class="creds-actions">
+        <button type="button" id="saveCredsBtn">Save to .env</button>
+        <span id="credsSaveStatus" class="muted"></span>
+      </div>
+    </form>
+  </dialog>
   <script src="console.js"></script>
 </body>
 </html>

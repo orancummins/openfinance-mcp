@@ -120,6 +120,17 @@ document.querySelectorAll(".tabs button").forEach((b) => {
   };
 });
 
+// ── Credentials modal ─────────────────────────────────────────────────────────
+const credsModal = document.getElementById("credsModal");
+document.getElementById("openCredsBtn").onclick = () => {
+  loadCredentials();
+  credsModal.showModal();
+};
+document.getElementById("closeCredsBtn").onclick = () => credsModal.close();
+credsModal.addEventListener("click", (e) => {
+  if (e.target === credsModal) credsModal.close();
+});
+
 let profilesLoaded = false;
 async function loadProfiles() {
   if (profilesLoaded) return;
@@ -182,3 +193,59 @@ document.getElementById("runHappy").onclick = async () => {
 refreshHealth();
 loadTools();
 setInterval(refreshHealth, 15000);
+
+// ── Credentials form ─────────────────────────────────────────────────────────
+let credsLoaded = false;
+
+async function loadCredentials() {
+  if (credsLoaded) return;
+  try {
+    const data = await api("/api/credentials");
+    document.getElementById("envFilePath").textContent = data.path || ".env";
+    const form = document.getElementById("credsForm");
+    Object.entries(data.values || {}).forEach(([k, v]) => {
+      const input = form.elements[k];
+      if (input) input.value = v;
+    });
+    credsLoaded = true;
+  } catch (err) {
+    document.getElementById("credsSaveStatus").textContent = "Failed to load: " + err;
+    document.getElementById("credsSaveStatus").className = "err";
+  }
+}
+
+document.querySelectorAll(".toggle-secret").forEach((btn) => {
+  btn.onclick = () => {
+    const input = document.querySelector(`[name="${btn.dataset.target}"]`);
+    if (!input) return;
+    const hidden = input.type === "password";
+    input.type = hidden ? "text" : "password";
+    btn.textContent = hidden ? "Hide" : "Show";
+  };
+});
+
+document.getElementById("saveCredsBtn").onclick = async () => {
+  const status = document.getElementById("credsSaveStatus");
+  status.textContent = "Saving…";
+  status.className = "muted";
+  const body = {};
+  const form = document.getElementById("credsForm");
+  form.querySelectorAll("input[name]").forEach((inp) => { body[inp.name] = inp.value; });
+  try {
+    const res = await api("/api/credentials", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (res.saved) {
+      status.textContent = `Saved to ${res.path}`;
+      status.className = "ok";
+    } else {
+      status.textContent = "Save failed: " + (res.error || "unknown error");
+      status.className = "err";
+    }
+  } catch (err) {
+    status.textContent = "Error: " + err;
+    status.className = "err";
+  }
+};
