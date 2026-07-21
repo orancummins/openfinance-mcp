@@ -43,7 +43,7 @@ fi
 
 # --- Start server ---
 echo "Starting openfinance-mcp server (transport: ${TRANSPORT:-http}, port: ${PORT:-9030})..."
-"$VENV_DIR/bin/openfinance-mcp" \
+"$VENV_DIR/bin/python" -m openfinance_mcp \
   --transport "${TRANSPORT:-http}" \
   --host "${HOST:-0.0.0.0}" \
   --port "${PORT:-9030}" &

@@ -45,7 +45,7 @@ PORT="${PORT:-8080}"
 MCP_URL="${MCP_URL:-http://localhost:9030/mcp}"
 
 echo "Starting console (port: $PORT, MCP_URL: $MCP_URL)..."
-MCP_URL="$MCP_URL" "$VENV_DIR/bin/uvicorn" app:app \
+MCP_URL="$MCP_URL" "$VENV_DIR/bin/python" -m uvicorn app:app \
   --host "${HOST:-0.0.0.0}" \
   --port "$PORT" \
   --app-dir "$CONSOLE_DIR" &

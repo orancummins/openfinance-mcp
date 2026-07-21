@@ -45,7 +45,7 @@ if not defined HOST set "HOST=0.0.0.0"
 if not defined PORT set "PORT=9030"
 
 echo Starting openfinance-mcp server (transport: %TRANSPORT%, port: %PORT%)...
-powershell -NoProfile -Command "$p = Start-Process -FilePath '%VENV_DIR%\Scripts\openfinance-mcp.exe' -ArgumentList '--transport','%TRANSPORT%','--host','%HOST%','--port','%PORT%' -NoNewWindow -PassThru; $p.Id | Out-File -FilePath '%PID_FILE%' -Encoding ascii -NoNewline"
+powershell -NoProfile -Command "$p = Start-Process -FilePath '%VENV_DIR%\Scripts\python.exe' -ArgumentList '-m','openfinance_mcp','--transport','%TRANSPORT%','--host','%HOST%','--port','%PORT%' -NoNewWindow -PassThru; $p.Id | Out-File -FilePath '%PID_FILE%' -Encoding ascii -NoNewline"
 
 set /p SERVER_PID=<"%PID_FILE%"
 echo Server started (PID %SERVER_PID%). PID saved to %PID_FILE%

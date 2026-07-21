@@ -46,7 +46,7 @@ if not defined MCP_URL set "MCP_URL=http://localhost:9030/mcp"
 
 echo Starting console (port: %PORT%, MCP_URL: %MCP_URL%)...
 set "MCP_URL=%MCP_URL%"
-powershell -NoProfile -Command "$p = Start-Process -FilePath '%VENV_DIR%\Scripts\uvicorn.exe' -ArgumentList 'app:app','--host','%HOST%','--port','%PORT%','--app-dir','%CONSOLE_ROOT%' -NoNewWindow -PassThru; $p.Id | Out-File -FilePath '%PID_FILE%' -Encoding ascii -NoNewline"
+powershell -NoProfile -Command "$p = Start-Process -FilePath '%VENV_DIR%\Scripts\python.exe' -ArgumentList '-m','uvicorn','app:app','--host','%HOST%','--port','%PORT%','--app-dir','%CONSOLE_ROOT%' -NoNewWindow -PassThru; $p.Id | Out-File -FilePath '%PID_FILE%' -Encoding ascii -NoNewline"
 
 set /p CONSOLE_PID=<"%PID_FILE%"
 echo Console started (PID %CONSOLE_PID%). PID saved to %PID_FILE%
