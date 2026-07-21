@@ -5,14 +5,11 @@ Run as a service over HTTP:  python -m openfinance_mcp --transport http --port 9
 """
 from __future__ import annotations
 
-from typing import Any
-
 from mcp.server.fastmcp import FastMCP
 
 from .config.settings import Settings, load_settings
 from .finicity_client import OpenFinanceClient
 from .models import ToolResult, wrap
-from .spec_defaults import decisions_as_dicts
 
 mcp = FastMCP("openfinance-us")
 
@@ -46,17 +43,8 @@ def get_client() -> OpenFinanceClient:
 
 
 # --------------------------------------------------------------------------- #
-# Diagnostics (no credentials required)
+# Finicity tools
 # --------------------------------------------------------------------------- #
-@mcp.tool()
-def server_status() -> dict[str, Any]:
-    """Report configuration source (secrets masked) and resolved spec decisions."""
-    return {
-        "credentials": get_settings().masked(),
-        "spec_decisions": decisions_as_dicts(),
-    }
-
-
 @mcp.tool()
 def create_access_token() -> ToolResult:
     """Force-create a Finicity App-Token; use this to verify credentials work."""

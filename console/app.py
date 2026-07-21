@@ -73,14 +73,6 @@ async def call(body: dict):
     }
 
 
-@app.get("/api/decisions")
-async def decisions():
-    """Return resolved spec decisions + open questions via the server_status tool."""
-    async with mcp_session() as s:
-        result = await s.call_tool("server_status", {})
-    return result.structuredContent or {}
-
-
 @app.get("/api/finbank-profiles")
 async def finbank_profiles():
     """Return the verified FinBank sandbox test profiles."""

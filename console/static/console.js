@@ -31,6 +31,44 @@ async function loadTools() {
   });
 }
 
+const TOOL_HINTS = {
+  generate_connect_url: `
+    <details class="tool-hint" open>
+      <summary>FinBank test credentials
+        <a href="https://developer.mastercard.com/open-finance-us/documentation/integration-and-testing/test-the-apis/"
+           target="_blank" rel="noopener">→ Full test profile docs</a>
+      </summary>
+      <p class="muted">After opening the generated URL, search for <strong>FinBank Profiles – A</strong>
+      and log in with one of these (username&nbsp;=&nbsp;password unless noted):</p>
+
+      <p class="hint-section">Test Personas</p>
+      <table class="hint-table">
+        <thead><tr><th>Username / Password</th><th>Persona</th><th>Key accounts</th></tr></thead>
+        <tbody>
+          <tr><td><code>profile_700</code></td><td>Sue – PM, steady income</td><td>Checking, savings, mortgage, investments, car lease</td></tr>
+          <tr><td><code>profile_701</code></td><td>Francis – restaurant owner</td><td>Multiple business checking, loans</td></tr>
+          <tr><td><code>profile_702</code></td><td>Joe – gig / contract worker</td><td>Checking, savings, no investments</td></tr>
+          <tr><td><code>profile_703</code></td><td>River – construction, renter</td><td>Checking, savings only</td></tr>
+          <tr><td><code>profile_704</code></td><td>Alex – student debt</td><td>Checking, limited savings, investment starter</td></tr>
+        </tbody>
+      </table>
+
+      <p class="hint-section">Standard bank account profiles</p>
+      <table class="hint-table">
+        <thead><tr><th>Username / Password</th><th>Accounts</th></tr></thead>
+        <tbody>
+          <tr><td><code>profile_03</code> ★</td><td>Checking, Personal Investment, 401k, Roth, Savings (used by Happy Path)</td></tr>
+          <tr><td><code>profile_02</code></td><td>Savings, IRA, 401k, Credit Card</td></tr>
+          <tr><td><code>profile_04</code></td><td>Checking, 403B, 529, Rollover, Mortgage</td></tr>
+          <tr><td><code>profile_05</code></td><td>Checking, Investment, Stocks, UGMA, UTMA</td></tr>
+          <tr><td><code>profile_06</code></td><td>Checking, Retirement, KEOGH, 457, Credit Card</td></tr>
+          <tr><td><code>demo</code> / <code>go</code></td><td>Basic sign-in success (no MFA)</td></tr>
+        </tbody>
+      </table>
+    </details>
+  `,
+};
+
 function renderRunner(tool) {
   const props = (tool.schema && tool.schema.properties) || {};
   const required = (tool.schema && tool.schema.required) || [];
@@ -41,9 +79,12 @@ function renderRunner(tool) {
         <input name="${k}" placeholder="${s.description || ""}"></label>`;
     })
     .join("");
+  const hint = TOOL_HINTS[tool.name] || "";
   const r = document.getElementById("toolRunner");
   r.innerHTML = `<h2>${tool.name}</h2><p class="muted">${tool.description || ""}</p>
     <form id="callForm">${fields}<button type="submit">Call tool</button></form>
+    ${hint}
+    <div id="callActions"></div>
     <pre id="callResult" class="terminal">—</pre>`;
   document.getElementById("callForm").onsubmit = async (e) => {
     e.preventDefault();
@@ -52,6 +93,7 @@ function renderRunner(tool) {
       if (v !== "") args[k] = v;
     });
     document.getElementById("callResult").textContent = "Calling…";
+    document.getElementById("callActions").innerHTML = "";
     try {
       const res = await api("/api/call", {
         method: "POST",
@@ -59,39 +101,21 @@ function renderRunner(tool) {
         body: JSON.stringify({ name: tool.name, arguments: args }),
       });
       document.getElementById("callResult").textContent = JSON.stringify(res, null, 2);
+      // Inject an Open Link button for any tool whose response contains a URL.
+      const link = res.structured?.data?.link ?? res.structured?.link ?? null;
+      if (link) {
+        const btn = document.createElement("a");
+        btn.href = link;
+        btn.target = "_blank";
+        btn.rel = "noopener noreferrer";
+        btn.className = "open-link-btn";
+        btn.textContent = "Open Link ↗";
+        document.getElementById("callActions").appendChild(btn);
+      }
     } catch (err) {
       document.getElementById("callResult").textContent = "Error: " + err;
     }
   };
-}
-
-async function loadDecisions() {
-  let data = {};
-  try {
-    data = await api("/api/decisions");
-  } catch {
-    document.getElementById("decisions").innerHTML =
-      '<p class="muted">Cannot reach MCP server.</p>';
-    return;
-  }
-  const creds = data.credentials || {};
-  document.getElementById("creds").innerHTML =
-    `<strong>Credentials</strong><br>source: <code>${creds.source}</code> ·
-     configured: <code>${creds.configured}</code> ·
-     base: <code>${creds.api_base_url}</code> ·
-     partner: <code>${creds.partner_id}</code>`;
-  const decisions = data.spec_decisions || [];
-  document.getElementById("decisions").innerHTML = decisions
-    .map(
-      (d) => `<div class="q-card ${d.status === "confirmed" ? "confirmed" : ""}">
-        <div class="status">${d.status}</div>
-        <strong>${d.id}</strong><p>${d.question}</p>
-        <div>Answer: <code>${d.answer}</code></div>
-        <div class="muted">source: ${d.source}${
-        d.env_override ? " · override: <code>" + d.env_override + "</code>" : ""
-      }</div></div>`
-    )
-    .join("");
 }
 
 document.getElementById("runTests").onclick = async () => {
@@ -115,7 +139,6 @@ document.querySelectorAll(".tabs button").forEach((b) => {
     b.classList.add("active");
     document.querySelectorAll(".tab").forEach((s) => s.classList.add("hidden"));
     document.getElementById("tab-" + b.dataset.tab).classList.remove("hidden");
-    if (b.dataset.tab === "decisions") loadDecisions();
     if (b.dataset.tab === "happy") loadProfiles();
   };
 });

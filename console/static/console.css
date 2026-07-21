@@ -32,11 +32,6 @@ main { padding: 0; }
 #toolRunner input { width: 100%; background: #04120f; border: 1px solid #14343b; color: var(--text);
   padding: 8px; border-radius: 6px; }
 .card { background: var(--panel); padding: 14px; margin: 16px; border-radius: 8px; }
-.q-card { background: var(--panel); border-left: 4px solid var(--warn); padding: 12px; margin: 10px 16px; border-radius: 6px; }
-.q-card.confirmed { border-left-color: var(--accent); }
-.q-card .status { font-weight: 700; text-transform: uppercase; font-size: 12px; }
-.q-card.confirmed .status { color: var(--accent); }
-.q-card:not(.confirmed) .status { color: var(--warn); }
 .test-controls { display: flex; gap: 10px; padding: 16px; align-items: center; }
 select { background: #04120f; color: var(--text); border: 1px solid #14343b; padding: 8px; border-radius: 6px; }
 .terminal { background: #04120f; color: #7fffd4; padding: 16px; margin: 0 16px 16px; border-radius: 8px;
@@ -80,3 +75,29 @@ code { color: var(--accent); }
   border-radius: 6px; font-weight: 700; cursor: pointer; }
 #credsSaveStatus.ok { color: var(--accent); }
 #credsSaveStatus.err { color: #ef4444; }
+
+/* Tool hints */
+.tool-hint { background: #071a1e; border: 1px solid #14343b; border-radius: 6px;
+  padding: 10px 14px; margin-top: 14px; font-size: 13px; }
+.tool-hint summary { cursor: pointer; color: var(--accent); font-weight: 600;
+  display: flex; align-items: center; gap: 6px; list-style: none; user-select: none; }
+.tool-hint summary::-webkit-details-marker { display: none; }
+.tool-hint summary::before { content: '\25B6'; font-size: 10px; transition: transform .15s; }
+details[open].tool-hint summary::before { transform: rotate(90deg); }
+.tool-hint summary a { margin-left: auto; color: var(--muted); font-weight: 400; font-size: 12px; }
+.tool-hint summary a:hover { color: var(--accent); }
+.hint-section { font-weight: 600; margin: 12px 0 4px; color: var(--text); font-size: 12px;
+  text-transform: uppercase; letter-spacing: .4px; }
+.hint-table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+.hint-table th { text-align: left; color: var(--muted); font-weight: 600; font-size: 11px;
+  text-transform: uppercase; padding: 4px 8px; border-bottom: 1px solid #14343b; }
+.hint-table td { padding: 5px 8px; border-bottom: 1px solid #0c2228; vertical-align: top; }
+.hint-table tr:last-child td { border-bottom: none; }
+.hint-table tr:hover td { background: #0c2228; }
+.hint-table code { font-size: 12px; white-space: nowrap; }
+
+/* Open Link button (appears after tool call returns a URL) */
+.open-link-btn { display: inline-block; margin-top: 10px; background: var(--accent);
+  color: #04120f; padding: 8px 18px; border-radius: 6px; font-weight: 700;
+  font-size: 13px; text-decoration: none; }
+.open-link-btn:hover { opacity: .85; }
