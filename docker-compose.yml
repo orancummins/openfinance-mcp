@@ -1,0 +1,21 @@
+# Runs the MCP server and the demo console as two independent services.
+# They couple only through MCP_URL, so either can be deployed on its own.
+services:
+  mcp:
+    build: .
+    environment:
+      - OPEN_FINANCE_PARTNER_ID=${OPEN_FINANCE_PARTNER_ID:-}
+      - OPEN_FINANCE_PARTNER_SECRET=${OPEN_FINANCE_PARTNER_SECRET:-}
+      - OPEN_FINANCE_APP_KEY=${OPEN_FINANCE_APP_KEY:-}
+      - OPEN_FINANCE_API_BASE_URL=${OPEN_FINANCE_API_BASE_URL:-https://api.finicity.com}
+    ports:
+      - "9030:9030"
+
+  console:
+    build: ./console
+    environment:
+      - MCP_URL=http://mcp:9030/mcp
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mcp

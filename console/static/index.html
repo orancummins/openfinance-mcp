@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Open Finance MCP Console</title>
+  <link rel="stylesheet" href="console.css" />
+</head>
+<body>
+  <header class="topbar">
+    <span class="brand">◧ Open Finance MCP <em>Console</em></span>
+    <span id="health" class="pill">checking…</span>
+  </header>
+  <nav class="tabs">
+    <button data-tab="tools" class="active">Tools</button>
+    <button data-tab="happy">Happy Path</button>
+    <button data-tab="decisions">Spec Decisions</button>
+    <button data-tab="tests">Tests</button>
+  </nav>
+  <main>
+    <section id="tab-tools" class="tab">
+      <aside id="toolList"></aside>
+      <div id="toolRunner"><h2>Select a tool</h2><p class="muted">Pick a tool on the left to invoke it against the MCP server.</p></div>
+    </section>
+    <section id="tab-happy" class="tab hidden">
+      <div class="happy-intro card">
+        <h2>Guided Happy Path</h2>
+        <p class="muted">Runs end-to-end against the live sandbox: create a testing customer, link FinBank accounts headlessly (no browser), then read accounts and transactions.</p>
+        <div class="happy-controls">
+          <select id="profileKey"></select>
+          <button id="runHappy">Run happy path</button>
+        </div>
+      </div>
+      <div id="happySteps"></div>
+      <pre id="happyRaw" class="terminal hidden"></pre>
+    </section>
+    <section id="tab-decisions" class="tab hidden">
+      <div id="creds" class="card"></div>
+      <div id="decisions"></div>
+    </section>
+    <section id="tab-tests" class="tab hidden">
+      <div class="test-controls">
+        <select id="marker">
+          <option value="not sandbox">unit + protocol (offline)</option>
+          <option value="sandbox">sandbox (live Finicity)</option>
+        </select>
+        <button id="runTests">Run tests</button>
+      </div>
+      <pre id="testOutput" class="terminal">No run yet.</pre>
+    </section>
+  </main>
+  <script src="console.js"></script>
+</body>
+</html>

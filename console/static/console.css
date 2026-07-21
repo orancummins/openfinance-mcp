@@ -1,0 +1,53 @@
+/* Teal/amber theme — intentionally distinct from the Vima slate/blue UI. */
+:root {
+  --bg: #0b1f24;
+  --panel: #0f2a30;
+  --accent: #2dd4bf;
+  --warn: #f59e0b;
+  --text: #e6fffb;
+  --muted: #7fa8a0;
+}
+* { box-sizing: border-box; margin: 0; }
+body { background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, sans-serif; }
+.topbar { display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 20px; border-bottom: 2px solid var(--accent); }
+.brand { font-weight: 700; letter-spacing: .5px; }
+.brand em { color: var(--accent); font-style: normal; }
+.pill { border-radius: 999px; padding: 3px 14px; background: var(--panel); font-size: 13px; }
+.pill.up { color: var(--accent); } .pill.down { color: #ef4444; }
+.tabs { display: flex; gap: 4px; padding: 8px 16px 0; border-bottom: 1px solid #14343b; }
+.tabs button { background: none; border: none; color: var(--text); padding: 10px 16px; cursor: pointer; font-size: 14px; }
+.tabs button.active { border-bottom: 2px solid var(--warn); color: var(--warn); }
+.hidden { display: none; }
+.muted { color: var(--muted); }
+main { padding: 0; }
+#tab-tools { display: grid; grid-template-columns: 260px 1fr; gap: 16px; padding: 16px; }
+#toolList { display: flex; flex-direction: column; gap: 4px; max-height: 78vh; overflow: auto; }
+#toolList button { text-align: left; background: var(--panel); border: 1px solid #14343b; color: var(--text);
+  padding: 8px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+#toolList button:hover { border-color: var(--accent); }
+#toolRunner { padding: 8px 4px; }
+#toolRunner label { display: block; margin: 10px 0 4px; font-size: 13px; }
+#toolRunner label small { color: var(--muted); }
+#toolRunner input { width: 100%; background: #04120f; border: 1px solid #14343b; color: var(--text);
+  padding: 8px; border-radius: 6px; }
+.card { background: var(--panel); padding: 14px; margin: 16px; border-radius: 8px; }
+.q-card { background: var(--panel); border-left: 4px solid var(--warn); padding: 12px; margin: 10px 16px; border-radius: 6px; }
+.q-card.confirmed { border-left-color: var(--accent); }
+.q-card .status { font-weight: 700; text-transform: uppercase; font-size: 12px; }
+.q-card.confirmed .status { color: var(--accent); }
+.q-card:not(.confirmed) .status { color: var(--warn); }
+.test-controls { display: flex; gap: 10px; padding: 16px; align-items: center; }
+select { background: #04120f; color: var(--text); border: 1px solid #14343b; padding: 8px; border-radius: 6px; }
+.terminal { background: #04120f; color: #7fffd4; padding: 16px; margin: 0 16px 16px; border-radius: 8px;
+  font-family: "Cascadia Code", ui-monospace, monospace; white-space: pre-wrap; min-height: 200px; font-size: 13px; }
+button.primary, #runTests, #toolRunner button { background: var(--accent); color: #04120f; border: none;
+  padding: 9px 18px; border-radius: 6px; font-weight: 700; cursor: pointer; margin-top: 12px; }
+code { color: var(--accent); }
+
+.happy-intro { margin: 16px; }
+.happy-controls { display: flex; gap: 10px; align-items: center; margin-top: 12px; }
+#runHappy { background: var(--accent); color: #04120f; border: none; padding: 9px 18px;
+  border-radius: 6px; font-weight: 700; cursor: pointer; }
+.happy-summary { border-left: 4px solid var(--warn); }
+.happy-summary.confirmed { border-left-color: var(--accent); }
