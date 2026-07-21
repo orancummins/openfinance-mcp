@@ -12,7 +12,7 @@ set "PYPROJECT=%SCRIPT_DIR%pyproject.toml"
 if exist "%PID_FILE%" (
     set /p OLD_PID=<"%PID_FILE%"
     if defined OLD_PID (
-        echo Stopping existing server (PID !OLD_PID!)...
+        echo Stopping existing server ^(PID !OLD_PID!^)...
         taskkill /PID !OLD_PID! /F >nul 2>&1
     )
     del "%PID_FILE%"
