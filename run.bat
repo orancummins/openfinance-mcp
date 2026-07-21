@@ -33,8 +33,8 @@ if exist "%MARKER%" (
 )
 if "!NEEDS_INSTALL!"=="1" (
     echo Installing dependencies...
-    "%VENV_DIR%\Scripts\pip.exe" install --quiet --upgrade pip
-    "%VENV_DIR%\Scripts\pip.exe" install --quiet -e "%REPO_ROOT%[console]"
+    "%VENV_DIR%\Scripts\python.exe" -m pip install --quiet --upgrade pip
+    "%VENV_DIR%\Scripts\python.exe" -m pip install --quiet -e "%REPO_ROOT%[console]"
     if errorlevel 1 ( echo Dependency installation failed. & exit /b 1 )
     type nul > "%MARKER%"
 )

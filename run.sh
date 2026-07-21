@@ -36,8 +36,8 @@ PYPROJECT="$SCRIPT_DIR/pyproject.toml"
 
 if [[ ! -f "$MARKER" || "$PYPROJECT" -nt "$MARKER" ]]; then
   echo "Installing dependencies..."
-  "$VENV_DIR/bin/pip" install --quiet --upgrade pip
-  "$VENV_DIR/bin/pip" install --quiet -e "$SCRIPT_DIR[console]"
+  "$VENV_DIR/bin/python" -m pip install --quiet --upgrade pip
+  "$VENV_DIR/bin/python" -m pip install --quiet -e "$SCRIPT_DIR[console]"
   touch "$MARKER"
 fi
 

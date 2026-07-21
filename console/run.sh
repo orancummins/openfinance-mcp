@@ -35,8 +35,8 @@ REQUIREMENTS="$CONSOLE_DIR/requirements.txt"
 
 if [[ ! -f "$MARKER" || "$REQUIREMENTS" -nt "$MARKER" ]]; then
   echo "Installing dependencies..."
-  "$VENV_DIR/bin/pip" install --quiet --upgrade pip
-  "$VENV_DIR/bin/pip" install --quiet -r "$REQUIREMENTS"
+  "$VENV_DIR/bin/python" -m pip install --quiet --upgrade pip
+  "$VENV_DIR/bin/python" -m pip install --quiet -r "$REQUIREMENTS"
   touch "$MARKER"
 fi
 
